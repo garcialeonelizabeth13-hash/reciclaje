@@ -1,7 +1,7 @@
 <template>
   <div id="app">
     <header>
-      <h1>♻️ App de Reciclaje</h1>
+      <h1>♻️ App de Reciclaje de Eli 3333</h1>
     </header>
     <main>
       <p>Bienvenido a tu aplicación de reciclaje</p>
@@ -12,7 +12,7 @@
 
 <script>
 export default {
-  name: 'App'
+  name: 'App',
 }
 </script>
 
