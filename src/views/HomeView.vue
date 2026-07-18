@@ -1,9 +1,19 @@
 <script setup lang="ts">
-import TheWelcome from '../components/TheWelcome.vue'
+import HeroSection from '../components/home/HeroSection.vue'
+import ServicesSection from '../components/home/ServicesSection.vue'
+import StatsSection from '../components/home/StatsSection.vue'
+import ProcessSection from '../components/home/ProcessSection.vue'
+import TestimonialsSection from '../components/home/TestimonialsSection.vue'
+import ContactSection from '../components/home/ContactSection.vue'
 </script>
 
 <template>
   <main>
-    <TheWelcome />
+    <HeroSection />
+    <ServicesSection />
+    <StatsSection />
+    <ProcessSection />
+    <TestimonialsSection />
+    <ContactSection />
   </main>
 </template>

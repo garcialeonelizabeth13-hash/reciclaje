@@ -1,46 +1,53 @@
-<template>
-  <div id="app">
-    <header>
-      <h1>♻️ App de Reciclaje de Eli 3333</h1>
-    </header>
-    <main>
-      <p>Bienvenido a tu aplicación de reciclaje</p>
-      <p>Este proyecto está listo para que comiences a desarrollar.</p>
-    </main>
-  </div>
-</template>
-
-<script>
-export default {
-  name: 'App',
-}
+<script setup lang="ts">
+import AppNavbar from './components/shared/AppNavbar.vue'
+import AppFooter from './components/shared/AppFooter.vue'
+import { RouterView } from 'vue-router'
 </script>
 
-<style scoped>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+<template>
+  <AppNavbar />
+  <RouterView />
+  <AppFooter />
+</template>
+
+<style>
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  font-family:
+    'Inter',
+    -apple-system,
+    BlinkMacSystemFont,
+    'Segoe UI',
+    Roboto,
+    sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  background: #ffffff;
+  color: #333333;
+  line-height: 1.6;
 }
 
-header {
-  margin-bottom: 2rem;
-}
-
-h1 {
-  color: #42b983;
+#app {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
 }
 
 main {
-  padding: 0 2rem;
+  flex: 1;
 }
 
-p {
-  font-size: 1.1rem;
-  line-height: 1.6;
-  margin: 1rem 0;
+img {
+  max-width: 100%;
+  height: auto;
 }
 </style>
