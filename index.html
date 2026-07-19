@@ -1,10 +1,26 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="es">
   <head>
-    <meta charset="UTF-8">
-    <link rel="icon" type="image/svg+xml" href="/vite.svg">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta charset="UTF-8" />
+    <link rel="icon" type="image/svg+xml" href="/vite.svg" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Reciclaje</title>
+    <script>
+      // Prevenir restauración de scroll del navegador
+      if ('scrollRestoration' in history) {
+        history.scrollRestoration = 'manual'
+      }
+      // Forzar scroll al inicio inmediatamente
+      window.addEventListener('beforeunload', function () {
+        window.scrollTo(0, 0)
+      })
+      // Asegurar que siempre inicie en la parte superior
+      window.addEventListener('load', function () {
+        setTimeout(function () {
+          window.scrollTo(0, 0)
+        }, 0)
+      })
+    </script>
   </head>
   <body>
     <div id="app"></div>

@@ -8,8 +8,8 @@
         en recursos valiosos
       </h1>
       <p class="hero__subtitle">
-        Somos líderes en la recolección, clasificación y reciclaje de productos.
-        Juntos construimos un planeta más limpio y sostenible.
+        Somos líderes en la recolección, clasificación y reciclaje de productos. Juntos construimos
+        un planeta más limpio y sostenible.
       </p>
       <div class="hero__actions">
         <a href="#contacto" class="btn btn--primary">Contáctanos</a>
@@ -17,15 +17,15 @@
       </div>
       <div class="hero__stats">
         <div class="hero__stat">
-          <strong>+500</strong>
+          <strong>+{{ animatedStats.tons }}</strong>
           <span>Toneladas recicladas</span>
         </div>
         <div class="hero__stat">
-          <strong>+200</strong>
+          <strong>+{{ animatedStats.companies }}</strong>
           <span>Empresas aliadas</span>
         </div>
         <div class="hero__stat">
-          <strong>10+</strong>
+          <strong>{{ animatedStats.years }}+</strong>
           <span>Años de experiencia</span>
         </div>
       </div>
@@ -37,6 +37,58 @@
     </div>
   </section>
 </template>
+
+<script setup lang="ts">
+import { ref, onMounted } from 'vue'
+
+const animatedStats = ref({
+  tons: 0,
+  companies: 0,
+  years: 0,
+})
+
+const targetStats = {
+  tons: 500,
+  companies: 200,
+  years: 10,
+}
+
+const animateValue = (
+  key: keyof typeof animatedStats.value,
+  start: number,
+  end: number,
+  duration: number,
+) => {
+  const startTime = performance.now()
+
+  const animate = (currentTime: number) => {
+    const elapsed = currentTime - startTime
+    const progress = Math.min(elapsed / duration, 1)
+
+    // Ease out cubic para una animación más suave
+    const easeOut = 1 - Math.pow(1 - progress, 3)
+
+    animatedStats.value[key] = Math.floor(start + (end - start) * easeOut)
+
+    if (progress < 1) {
+      requestAnimationFrame(animate)
+    } else {
+      animatedStats.value[key] = end
+    }
+  }
+
+  requestAnimationFrame(animate)
+}
+
+onMounted(() => {
+  // Pequeño delay antes de iniciar las animaciones
+  setTimeout(() => {
+    animateValue('tons', 0, targetStats.tons, 2000)
+    animateValue('companies', 0, targetStats.companies, 2200)
+    animateValue('years', 0, targetStats.years, 1800)
+  }, 300)
+})
+</script>
 
 <style scoped>
 .hero {
@@ -189,13 +241,24 @@
 }
 
 @keyframes pulse {
-  0%, 100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(46, 213, 115, 0.2); }
-  50% { transform: scale(1.03); box-shadow: 0 0 60px 20px rgba(46, 213, 115, 0.1); }
+  0%,
+  100% {
+    transform: scale(1);
+    box-shadow: 0 0 0 0 rgba(46, 213, 115, 0.2);
+  }
+  50% {
+    transform: scale(1.03);
+    box-shadow: 0 0 60px 20px rgba(46, 213, 115, 0.1);
+  }
 }
 
 @keyframes spin {
-  from { transform: rotate(0deg); }
-  to { transform: rotate(360deg); }
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (max-width: 900px) {
@@ -205,11 +268,24 @@
     padding: 120px 1.5rem 4rem;
   }
 
-  .hero__subtitle { margin: 0 auto 2.5rem; }
-  .hero__actions { justify-content: center; }
-  .hero__stats { justify-content: center; }
-  .hero__image { margin-top: 3rem; }
-  .hero__image-circle { width: 260px; height: 260px; }
-  .hero__icon { font-size: 7rem; }
+  .hero__subtitle {
+    margin: 0 auto 2.5rem;
+  }
+  .hero__actions {
+    justify-content: center;
+  }
+  .hero__stats {
+    justify-content: center;
+  }
+  .hero__image {
+    margin-top: 3rem;
+  }
+  .hero__image-circle {
+    width: 260px;
+    height: 260px;
+  }
+  .hero__icon {
+    font-size: 7rem;
+  }
 }
 </style>

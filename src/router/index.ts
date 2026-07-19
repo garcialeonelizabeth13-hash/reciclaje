@@ -18,6 +18,17 @@ const router = createRouter({
       component: () => import('../views/AboutView.vue'),
     },
   ],
+  scrollBehavior(to, from, savedPosition) {
+    // Si hay un hash (#contacto, #servicios, etc.), navega a ese elemento
+    if (to.hash) {
+      return {
+        el: to.hash,
+        behavior: 'smooth',
+      }
+    }
+    // Siempre ir al inicio, ignorando savedPosition en recargas
+    return { top: 0, left: 0 }
+  },
 })
 
 export default router

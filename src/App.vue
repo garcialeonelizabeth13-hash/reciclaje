@@ -2,6 +2,12 @@
 import AppNavbar from './components/shared/AppNavbar.vue'
 import AppFooter from './components/shared/AppFooter.vue'
 import { RouterView } from 'vue-router'
+import { onMounted } from 'vue'
+
+// Forzar scroll al inicio cuando se monta el componente
+onMounted(() => {
+  window.scrollTo(0, 0)
+})
 </script>
 
 <template>
