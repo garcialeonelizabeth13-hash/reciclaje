@@ -1,5 +1,6 @@
 import { createApp } from 'vue'
 import './assets/main.css'
+import '@mdi/font/css/materialdesignicons.css'
 import App from './App.vue'
 import router from './router/index.ts'
 

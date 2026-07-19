@@ -6,18 +6,26 @@
           <!-- Brand -->
           <div class="footer__brand">
             <div class="footer__logo">
-              <span>♻️</span>
+              <i class="mdi mdi-recycle"></i>
               <span class="footer__logo-text">EcoRecicla</span>
             </div>
             <p class="footer__tagline">
-              Transformamos residuos en recursos valiosos para construir
-              un planeta más limpio y sostenible.
+              Transformamos residuos en recursos valiosos para construir un planeta más limpio y
+              sostenible.
             </p>
             <div class="footer__socials">
-              <a href="#" class="footer__social" aria-label="Facebook">📘</a>
-              <a href="#" class="footer__social" aria-label="Instagram">📸</a>
-              <a href="#" class="footer__social" aria-label="LinkedIn">💼</a>
-              <a href="#" class="footer__social" aria-label="WhatsApp">📱</a>
+              <a href="#" class="footer__social" aria-label="Facebook">
+                <i class="mdi mdi-facebook"></i>
+              </a>
+              <a href="#" class="footer__social" aria-label="Instagram">
+                <i class="mdi mdi-instagram"></i>
+              </a>
+              <a href="#" class="footer__social" aria-label="LinkedIn">
+                <i class="mdi mdi-linkedin"></i>
+              </a>
+              <a href="#" class="footer__social" aria-label="WhatsApp">
+                <i class="mdi mdi-whatsapp"></i>
+              </a>
             </div>
           </div>
 
@@ -50,19 +58,19 @@
             <h4 class="footer__col-title">Contacto</h4>
             <ul class="footer__contact-list">
               <li>
-                <span>📍</span>
+                <i class="mdi mdi-map-marker"></i>
                 <span>Av. Verde 123, Col. Ecológica</span>
               </li>
               <li>
-                <span>📞</span>
+                <i class="mdi mdi-phone"></i>
                 <a href="tel:+525512345678">+52 (55) 1234-5678</a>
               </li>
               <li>
-                <span>✉️</span>
+                <i class="mdi mdi-email"></i>
                 <a href="mailto:contacto@reciclaje.com">contacto@reciclaje.com</a>
               </li>
               <li>
-                <span>🕐</span>
+                <i class="mdi mdi-clock-outline"></i>
                 <span>Lun–Vie: 8am – 6pm</span>
               </li>
             </ul>
@@ -74,7 +82,7 @@
     <div class="footer__bottom">
       <div class="container">
         <p>© {{ currentYear }} EcoRecicla. Todos los derechos reservados.</p>
-        <p>Hecho con 💚 por el planeta</p>
+        <p>Hecho con <i class="mdi mdi-heart" style="color: #2ed573"></i> por el planeta</p>
       </div>
     </div>
   </footer>
@@ -115,6 +123,11 @@ const currentYear = new Date().getFullYear()
   font-size: 1.4rem;
 }
 
+.footer__logo i {
+  color: #2ed573;
+  font-size: 1.8rem;
+}
+
 .footer__logo-text {
   font-size: 1.3rem;
   font-weight: 800;
@@ -147,10 +160,19 @@ const currentYear = new Date().getFullYear()
   transition: all 0.2s ease;
 }
 
+.footer__social i {
+  color: rgba(255, 255, 255, 0.7);
+  font-size: 1.2rem;
+}
+
 .footer__social:hover {
   background: rgba(46, 213, 115, 0.2);
   border-color: rgba(46, 213, 115, 0.4);
   transform: translateY(-2px);
+}
+
+.footer__social:hover i {
+  color: #2ed573;
 }
 
 .footer__col-title {
@@ -200,6 +222,13 @@ const currentYear = new Date().getFullYear()
   flex-shrink: 0;
   font-size: 1rem;
   margin-top: 1px;
+}
+
+.footer__contact-list i {
+  flex-shrink: 0;
+  font-size: 1.1rem;
+  color: #2ed573;
+  margin-top: 2px;
 }
 
 .footer__contact-list a {
