@@ -5,7 +5,7 @@
       <span class="hero__badge">♻️ Empresa Estatal Socialista</span>
       <h1 class="hero__title">
         <span class="hero__title--highlight">ISDE</span><br />
-        <span class="hero__title--main">Ingeniería del Reciclaje</span>
+        <span class="hero__title--main">Empresa de Ingeniería Del Reciclaje</span>
       </h1>
       <p class="hero__subtitle">
         <strong>Grupo Empresarial del Reciclaje</strong><br />

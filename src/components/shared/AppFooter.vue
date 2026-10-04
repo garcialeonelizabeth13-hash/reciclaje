@@ -6,11 +6,11 @@
           <!-- Brand -->
           <div class="footer__brand">
             <div class="footer__logo">
-              <i class="mdi mdi-recycle"></i>
+              <img src="/img/logo.png" alt="ISDE Logo" class="footer__logo-img" />
               <span class="footer__logo-text">ISDE</span>
             </div>
             <p class="footer__tagline">
-              <strong>ISDE - Ingeniería del Reciclaje</strong><br />
+              <strong>ISDE - Empresa de Ingeniería Del Reciclaje</strong><br />
               Empresa Estatal Socialista - Grupo Empresarial del Reciclaje<br /><br />
               Transformamos residuos en recursos valiosos para construir un futuro sostenible.
             </p>
@@ -82,7 +82,10 @@
 
     <div class="footer__bottom">
       <div class="container">
-        <p>© {{ currentYear }} ISDE - Ingeniería del Reciclaje. Todos los derechos reservados.</p>
+        <p>
+          © {{ currentYear }} ISDE - Empresa de Ingeniería Del Reciclaje. Todos los derechos
+          reservados.
+        </p>
         <p>Empresa Estatal Socialista | Grupo Empresarial del Reciclaje</p>
       </div>
     </div>
@@ -119,14 +122,15 @@ const currentYear = new Date().getFullYear()
 .footer__logo {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.7rem;
   margin-bottom: 1rem;
   font-size: 1.4rem;
 }
 
-.footer__logo i {
-  color: #28a745;
-  font-size: 1.8rem;
+.footer__logo-img {
+  height: 45px;
+  width: auto;
+  object-fit: contain;
 }
 
 .footer__logo-text {

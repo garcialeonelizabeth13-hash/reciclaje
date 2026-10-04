@@ -2,7 +2,7 @@
   <header class="navbar" :class="{ 'navbar--scrolled': isScrolled }">
     <div class="navbar__container">
       <RouterLink to="/" class="navbar__logo">
-        <span class="navbar__logo-icon">♻️</span>
+        <img src="/img/logo.png" alt="ISDE Logo" class="navbar__logo-img" />
         <span class="navbar__logo-text">ISDE</span>
       </RouterLink>
 
@@ -81,8 +81,10 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
   text-decoration: none;
 }
 
-.navbar__logo-icon {
-  font-size: 1.8rem;
+.navbar__logo-img {
+  height: 40px;
+  width: auto;
+  object-fit: contain;
 }
 
 .navbar__logo-text {
