@@ -7,11 +7,12 @@
           <div class="footer__brand">
             <div class="footer__logo">
               <i class="mdi mdi-recycle"></i>
-              <span class="footer__logo-text">EcoRecicla</span>
+              <span class="footer__logo-text">ISDE</span>
             </div>
             <p class="footer__tagline">
-              Transformamos residuos en recursos valiosos para construir un planeta más limpio y
-              sostenible.
+              <strong>ISDE - Ingeniería del Reciclaje</strong><br />
+              Empresa Estatal Socialista - Grupo Empresarial del Reciclaje<br /><br />
+              Transformamos residuos en recursos valiosos para construir un futuro sostenible.
             </p>
             <div class="footer__socials">
               <a href="#" class="footer__social" aria-label="Facebook">
@@ -81,8 +82,8 @@
 
     <div class="footer__bottom">
       <div class="container">
-        <p>© {{ currentYear }} EcoRecicla. Todos los derechos reservados.</p>
-        <p>Hecho con <i class="mdi mdi-heart" style="color: #2ed573"></i> por el planeta</p>
+        <p>© {{ currentYear }} ISDE - Ingeniería del Reciclaje. Todos los derechos reservados.</p>
+        <p>Empresa Estatal Socialista | Grupo Empresarial del Reciclaje</p>
       </div>
     </div>
   </footer>
@@ -96,8 +97,8 @@ const currentYear = new Date().getFullYear()
 
 <style scoped>
 .footer {
-  background: #060f09;
-  color: rgba(255, 255, 255, 0.75);
+  background: #003399;
+  color: rgba(255, 255, 255, 0.85);
 }
 
 .footer__main {
@@ -124,7 +125,7 @@ const currentYear = new Date().getFullYear()
 }
 
 .footer__logo i {
-  color: #2ed573;
+  color: #28a745;
   font-size: 1.8rem;
 }
 
@@ -166,19 +167,19 @@ const currentYear = new Date().getFullYear()
 }
 
 .footer__social:hover {
-  background: rgba(46, 213, 115, 0.2);
-  border-color: rgba(46, 213, 115, 0.4);
+  background: rgba(40, 167, 69, 0.2);
+  border-color: rgba(40, 167, 69, 0.5);
   transform: translateY(-2px);
 }
 
 .footer__social:hover i {
-  color: #2ed573;
+  color: #28a745;
 }
 
 .footer__col-title {
   font-size: 0.9rem;
   font-weight: 700;
-  color: #2ed573;
+  color: #dc3545;
   text-transform: uppercase;
   letter-spacing: 1px;
   margin-bottom: 1.2rem;
@@ -200,7 +201,7 @@ const currentYear = new Date().getFullYear()
 }
 
 .footer__links a:hover {
-  color: #2ed573;
+  color: #28a745;
 }
 
 .footer__contact-list {
@@ -227,18 +228,18 @@ const currentYear = new Date().getFullYear()
 .footer__contact-list i {
   flex-shrink: 0;
   font-size: 1.1rem;
-  color: #2ed573;
+  color: #28a745;
   margin-top: 2px;
 }
 
 .footer__contact-list a {
-  color: rgba(255, 255, 255, 0.6);
+  color: rgba(255, 255, 255, 0.7);
   text-decoration: none;
   transition: color 0.2s;
 }
 
 .footer__contact-list a:hover {
-  color: #2ed573;
+  color: #28a745;
 }
 
 .footer__bottom {

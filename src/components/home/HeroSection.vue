@@ -2,14 +2,15 @@
   <section class="hero">
     <div class="hero__overlay"></div>
     <div class="hero__content">
-      <span class="hero__badge">♻️ Empresa de Reciclaje</span>
+      <span class="hero__badge">♻️ Empresa Estatal Socialista</span>
       <h1 class="hero__title">
-        Transformamos <span class="hero__title--green">residuos</span><br />
-        en recursos valiosos
+        <span class="hero__title--highlight">ISDE</span><br />
+        <span class="hero__title--main">Ingeniería del Reciclaje</span>
       </h1>
       <p class="hero__subtitle">
-        Somos líderes en la recolección, clasificación y reciclaje de productos. Juntos construimos
-        un planeta más limpio y sostenible.
+        <strong>Grupo Empresarial del Reciclaje</strong><br />
+        Transformamos residuos en recursos valiosos. Líderes en recolección, clasificación y
+        reciclaje industrial para construir un futuro sostenible.
       </p>
       <div class="hero__actions">
         <a href="#contacto" class="btn btn--primary">Contáctanos</a>
@@ -96,7 +97,7 @@ onMounted(() => {
   min-height: 100vh;
   display: flex;
   align-items: center;
-  background: linear-gradient(135deg, #0a2e1a 0%, #1a5c32 50%, #0d3d20 100%);
+  background: linear-gradient(135deg, #003399 0%, #0052cc 50%, #002266 100%);
   overflow: hidden;
   padding: 100px 2rem 4rem;
 }
@@ -105,7 +106,7 @@ onMounted(() => {
   content: '';
   position: absolute;
   inset: 0;
-  background: radial-gradient(ellipse at 70% 50%, rgba(46, 213, 115, 0.15) 0%, transparent 60%);
+  background: radial-gradient(ellipse at 70% 50%, rgba(40, 167, 69, 0.15) 0%, transparent 60%);
 }
 
 .hero__content {
@@ -117,9 +118,9 @@ onMounted(() => {
 
 .hero__badge {
   display: inline-block;
-  background: rgba(46, 213, 115, 0.2);
-  border: 1px solid rgba(46, 213, 115, 0.4);
-  color: #2ed573;
+  background: rgba(220, 53, 69, 0.2);
+  border: 1px solid rgba(220, 53, 69, 0.5);
+  color: #dc3545;
   padding: 6px 16px;
   border-radius: 50px;
   font-size: 0.85rem;
@@ -132,12 +133,18 @@ onMounted(() => {
   font-size: clamp(2.2rem, 5vw, 3.8rem);
   font-weight: 800;
   color: #ffffff;
-  line-height: 1.15;
+  line-height: 1.2;
   margin-bottom: 1.5rem;
 }
 
-.hero__title--green {
-  color: #2ed573;
+.hero__title--highlight {
+  color: #ffffff;
+  display: block;
+}
+
+.hero__title--main {
+  color: #28a745;
+  display: block;
 }
 
 .hero__subtitle {
@@ -167,26 +174,27 @@ onMounted(() => {
 }
 
 .btn--primary {
-  background: #2ed573;
-  color: #0a2e1a;
-  border: 2px solid #2ed573;
+  background: #dc3545;
+  color: #ffffff;
+  border: 2px solid #dc3545;
 }
 
 .btn--primary:hover {
-  background: #26c065;
+  background: #c82333;
   transform: translateY(-2px);
-  box-shadow: 0 8px 24px rgba(46, 213, 115, 0.4);
+  box-shadow: 0 8px 24px rgba(220, 53, 69, 0.4);
 }
 
 .btn--outline {
   background: transparent;
   color: #ffffff;
-  border: 2px solid rgba(255, 255, 255, 0.4);
+  border: 2px solid rgba(255, 255, 255, 0.6);
 }
 
 .btn--outline:hover {
-  border-color: #2ed573;
-  color: #2ed573;
+  border-color: #28a745;
+  background: rgba(40, 167, 69, 0.1);
+  color: #28a745;
   transform: translateY(-2px);
 }
 
@@ -204,7 +212,7 @@ onMounted(() => {
 .hero__stat strong {
   font-size: 1.8rem;
   font-weight: 800;
-  color: #2ed573;
+  color: #28a745;
   line-height: 1;
 }
 
@@ -227,8 +235,8 @@ onMounted(() => {
   width: 380px;
   height: 380px;
   border-radius: 50%;
-  background: radial-gradient(circle, rgba(46, 213, 115, 0.25) 0%, rgba(46, 213, 115, 0.05) 70%);
-  border: 2px solid rgba(46, 213, 115, 0.3);
+  background: radial-gradient(circle, rgba(40, 167, 69, 0.25) 0%, rgba(40, 167, 69, 0.05) 70%);
+  border: 2px solid rgba(40, 167, 69, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -244,11 +252,11 @@ onMounted(() => {
   0%,
   100% {
     transform: scale(1);
-    box-shadow: 0 0 0 0 rgba(46, 213, 115, 0.2);
+    box-shadow: 0 0 0 0 rgba(40, 167, 69, 0.2);
   }
   50% {
     transform: scale(1.03);
-    box-shadow: 0 0 60px 20px rgba(46, 213, 115, 0.1);
+    box-shadow: 0 0 60px 20px rgba(40, 167, 69, 0.1);
   }
 }
 

@@ -16,10 +16,20 @@ export const API_ENDPOINTS = {
   // Health
   health: '/health',
   healthDb: '/health/db',
-  
+
   // Users
   users: '/users',
   userById: (id: number) => `/users/${id}`,
-  
-  // Aquí puedes agregar más endpoints según los vayas creando en el backend
+
+  // Articles
+  articles: '/articles',
+  articleById: (id: number) => `/articles/${id}`,
+  articlesByCategory: (categoryId: number) => `/articles/category/${categoryId}`,
+  featuredArticles: '/articles/featured/list',
+  searchArticles: (query: string) => `/articles/search/${query}`,
+
+  // Categories
+  categories: '/categories',
+  categoryById: (id: number) => `/categories/${id}`,
+  categoryCount: (id: number) => `/categories/${id}/count`,
 } as const

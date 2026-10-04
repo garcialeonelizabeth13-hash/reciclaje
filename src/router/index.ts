@@ -22,6 +22,11 @@ const router = createRouter({
       name: 'users',
       component: () => import('../views/UsersView.vue'),
     },
+    {
+      path: '/articles',
+      name: 'articles',
+      component: () => import('../views/ArticlesView.vue'),
+    },
   ],
   scrollBehavior(to, from, savedPosition) {
     // Si hay un hash (#contacto, #servicios, etc.), navega a ese elemento

@@ -3,7 +3,7 @@
     <div class="navbar__container">
       <RouterLink to="/" class="navbar__logo">
         <span class="navbar__logo-icon">♻️</span>
-        <span class="navbar__logo-text">EcoRecicla</span>
+        <span class="navbar__logo-text">ISDE</span>
       </RouterLink>
 
       <nav class="navbar__nav" :class="{ 'navbar__nav--open': menuOpen }">
@@ -11,6 +11,9 @@
         <a href="/#servicios" class="navbar__link" @click="menuOpen = false">Servicios</a>
         <a href="/#proceso" class="navbar__link" @click="menuOpen = false">Proceso</a>
         <RouterLink to="/about" class="navbar__link" @click="menuOpen = false">Nosotros</RouterLink>
+        <RouterLink to="/articles" class="navbar__link" @click="menuOpen = false"
+          >Artículos</RouterLink
+        >
         <RouterLink to="/users" class="navbar__link" @click="menuOpen = false">Usuarios</RouterLink>
         <a href="/#contacto" class="navbar__cta" @click="menuOpen = false">Contáctanos</a>
       </nav>
@@ -53,10 +56,11 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
   z-index: 1000;
   padding: 1.2rem 2rem;
   transition: all 0.3s ease;
+  background: rgba(0, 51, 153, 0.95);
 }
 
 .navbar--scrolled {
-  background: rgba(10, 46, 26, 0.97);
+  background: rgba(0, 51, 153, 0.98);
   backdrop-filter: blur(12px);
   padding: 0.8rem 2rem;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
@@ -106,13 +110,13 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
 
 .navbar__link:hover,
 .navbar__link.router-link-active {
-  color: #2ed573;
-  background: rgba(46, 213, 115, 0.1);
+  color: #28a745;
+  background: rgba(40, 167, 69, 0.1);
 }
 
 .navbar__cta {
-  background: #2ed573;
-  color: #0a2e1a;
+  background: #dc3545;
+  color: #ffffff;
   text-decoration: none;
   font-size: 0.9rem;
   font-weight: 700;
@@ -123,9 +127,9 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
 }
 
 .navbar__cta:hover {
-  background: #26c065;
+  background: #c82333;
   transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(46, 213, 115, 0.4);
+  box-shadow: 0 6px 16px rgba(220, 53, 69, 0.4);
 }
 
 .navbar__burger {
@@ -171,7 +175,7 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
     width: 75%;
     max-width: 300px;
     height: 100vh;
-    background: #0a2e1a;
+    background: #003399;
     flex-direction: column;
     align-items: flex-start;
     padding: 5rem 2rem 2rem;
