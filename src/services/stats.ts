@@ -1,16 +1,19 @@
-import { apiService } from './api'
-import type { StatsOverview, PopularArticle, RecentContent } from '../types'
+import { apiClient } from './api'
 
 export const statsService = {
-  getOverview: () => apiService.get<StatsOverview>('/stats/overview'),
+  async getOverview(): Promise<any> {
+    return apiClient.get('/stats/overview')
+  },
 
-  getPopularContent: (limit: number = 10) =>
-    apiService.get<{ popular_articles: PopularArticle[] }>('/stats/content/popular', { limit }),
+  async getPopularContent(limit: number = 10): Promise<any> {
+    return apiClient.get(`/stats/content/popular?limit=${limit}`)
+  },
 
-  getRecentContent: (limit: number = 10) =>
-    apiService.get<RecentContent>('/stats/content/recent', { limit }),
+  async getRecentContent(limit: number = 10): Promise<any> {
+    return apiClient.get(`/stats/content/recent?limit=${limit}`)
+  },
 
-  getCategoriesActivity: () => apiService.get<any>('/stats/categories/activity'),
-
-  getDatabaseHealth: () => apiService.get<any>('/stats/database/health'),
+  async getDatabaseHealth(): Promise<any> {
+    return apiClient.get('/stats/database/health')
+  },
 }

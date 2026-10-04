@@ -1,370 +1,285 @@
 <template>
-  <div class="home">
-    <!-- Hero -->
+  <Layout>
+    <!-- Hero Section -->
     <section class="hero">
-      <div class="hero__container">
-        <div class="hero__content">
-          <h1 class="hero__title">Observatorio ISDE</h1>
-          <p class="hero__subtitle">
-            Tu fuente de información sobre innovación, ingeniería y reciclaje sostenible
+      <div class="hero-content">
+        <div class="hero-text">
+          <h1>Observatorio de Contenidos</h1>
+          <p>
+            Centro integral de monitoreo y análisis de información sobre reciclaje e impacto
+            ambiental
           </p>
-          <router-link to="/articles" class="hero__cta">Ver Noticias</router-link>
+          <RouterLink to="/observatorio" class="btn btn-primary"
+            >Explorar Observatorio →</RouterLink
+          >
         </div>
       </div>
     </section>
 
-    <!-- Últimas Noticias -->
-    <section class="latest-news">
+    <!-- Stats Section -->
+    <section class="stats-section">
       <div class="container">
-        <h2 class="section-title">Últimas Noticias</h2>
-        <div v-if="loadingArticles" class="loading">Cargando noticias...</div>
-        <div v-else-if="articles.length === 0" class="no-content">No hay noticias disponibles</div>
-        <div v-else class="articles-grid">
-          <article-card
-            v-for="article in articles.slice(0, 6)"
-            :key="article.id"
-            :article="article"
-          />
-        </div>
-        <div class="section-footer">
-          <router-link to="/articles" class="btn-secondary">Ver Todas las Noticias →</router-link>
+        <div class="stats-grid">
+          <StatCard icon="📰" label="Artículos" value="250+" change="12" />
+          <StatCard icon="🏷️" label="Categorías" value="15" change="5" />
+          <StatCard icon="👁️" label="Vistas" value="50K+" change="18" />
+          <StatCard icon="⭐" label="Destacados" value="32" change="8" />
         </div>
       </div>
     </section>
 
-    <!-- Categorías -->
+    <!-- Recent Articles -->
+    <section class="recent-section">
+      <div class="container">
+        <div class="section-header">
+          <h2>Últimas Publicaciones</h2>
+          <RouterLink to="/articulos" class="view-all">Ver todas →</RouterLink>
+        </div>
+        <div class="articles-preview">
+          <ArticleCard v-for="article in recentArticles" :key="article.id" :article="article" />
+        </div>
+      </div>
+    </section>
+
+    <!-- Categories Section -->
     <section class="categories-section">
       <div class="container">
-        <h2 class="section-title">Categorías</h2>
-        <div v-if="loadingCategories" class="loading">Cargando categorías...</div>
-        <div v-else-if="categories.length === 0" class="no-content">
-          No hay categorías disponibles
-        </div>
-        <div v-else class="categories-grid">
-          <router-link
-            v-for="category in categories.slice(0, 6)"
-            :key="category.id"
-            :to="`/articles?category=${category.id}`"
+        <h2>Categorías Principales</h2>
+        <div class="categories-grid">
+          <a
+            v-for="cat in categories"
+            :key="cat.id"
+            href="#"
             class="category-card"
+            @click.prevent="goToCategory(cat.id)"
           >
-            <span class="category-name">{{ category.title }}</span>
-            <span class="category-count">{{ getCategoryCount(category.id) }}</span>
-          </router-link>
+            <span class="category-count">{{ categoryCounts[cat.id] || 0 }}</span>
+            <span class="category-name">{{ cat.title }}</span>
+          </a>
         </div>
       </div>
     </section>
-
-    <!-- Estadísticas -->
-    <section v-if="stats" class="stats-section">
-      <div class="container">
-        <h2 class="section-title">En Números</h2>
-        <div class="stats-grid">
-          <div class="stat-card">
-            <span class="stat-number">{{ stats.content.published_articles }}</span>
-            <span class="stat-label">Noticias Publicadas</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-number">{{ stats.categories.active_categories }}</span>
-            <span class="stat-label">Categorías</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-number">{{ stats.comments.published_comments }}</span>
-            <span class="stat-label">Comentarios</span>
-          </div>
-          <div class="stat-card">
-            <span class="stat-number">{{ stats.attachments.total_files }}</span>
-            <span class="stat-label">Recursos</span>
-          </div>
-        </div>
-      </div>
-    </section>
-
-    <!-- Contacto -->
-    <section class="contact-section">
-      <div class="container">
-        <h2 class="section-title">¿Preguntas?</h2>
-        <p class="contact-description">
-          Contáctanos para más información sobre nuestras noticias y actualizaciones
-        </p>
-        <router-link to="/contacts" class="btn-secondary">Ver Contactos</router-link>
-      </div>
-    </section>
-  </div>
+  </Layout>
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
+import { ref, onMounted } from 'vue'
+import { RouterLink } from 'vue-router'
+import Layout from '../components/shared/Layout.vue'
+import StatCard from '../components/StatCard.vue'
+import ArticleCard from '../components/ArticleCard.vue'
 import { articlesService } from '../services/articles'
 import { categoriesService } from '../services/categories'
-import { statsService } from '../services/stats'
-import ArticleCard from '../components/ArticleCard.vue'
-import type { Article, Category, StatsOverview } from '../types'
+import type { Article, Category } from '../types'
 
-const articles = ref<Article[]>([])
+const recentArticles = ref<Article[]>([])
 const categories = ref<Category[]>([])
-const stats = ref<StatsOverview | null>(null)
-const loadingArticles = ref(false)
-const loadingCategories = ref(false)
+const categoryCounts = ref<Record<number, number>>({})
 
 onMounted(async () => {
-  await loadArticles()
-  await loadCategories()
-  await loadStats()
+  try {
+    const articles = await articlesService.getAll(0, 6)
+    recentArticles.value = articles
+
+    const cats = await categoriesService.getAll(0, 100)
+    categories.value = cats
+
+    // Contar artículos por categoría
+    for (const cat of cats) {
+      const count = articles.filter((a) => a.catid === cat.id).length
+      categoryCounts.value[cat.id] = count
+    }
+  } catch (error) {
+    console.error('Error loading home data:', error)
+  }
 })
-
-const loadArticles = async () => {
-  loadingArticles.value = true
-  try {
-    articles.value = await articlesService.getAll(0, 50)
-  } catch (err) {
-    console.error('Error loading articles:', err)
-  } finally {
-    loadingArticles.value = false
-  }
-}
-
-const loadCategories = async () => {
-  loadingCategories.value = true
-  try {
-    categories.value = await categoriesService.getAll(0, 50)
-  } catch (err) {
-    console.error('Error loading categories:', err)
-  } finally {
-    loadingCategories.value = false
-  }
-}
-
-const loadStats = async () => {
-  try {
-    stats.value = await statsService.getOverview()
-  } catch (err) {
-    console.error('Error loading stats:', err)
-  }
-}
-
-const getCategoryCount = (categoryId: number): number => {
-  return articles.value.filter((a) => a.catid === categoryId).length
-}
 </script>
 
 <style scoped>
-.home {
-  width: 100%;
-}
-
-.container {
-  max-width: 1200px;
-  margin: 0 auto;
-  padding: 0 20px;
-}
-
-/* Hero */
 .hero {
-  background: linear-gradient(135deg, #003399 0%, #005acc 100%);
-  color: white;
-  padding: 100px 20px;
+  background: linear-gradient(135deg, #003399 0%, #002266 100%);
+  color: #fff;
+  padding: 8rem 1.5rem;
   text-align: center;
+  margin-top: 80px;
 }
 
-.hero__container {
+.hero-content {
   max-width: 1200px;
   margin: 0 auto;
 }
 
-.hero__title {
+.hero-text h1 {
   font-size: 3.5rem;
-  font-weight: 800;
-  margin-bottom: 20px;
-  text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.3);
+  font-weight: 700;
+  margin: 0 0 1rem;
+  line-height: 1.2;
 }
 
-.hero__subtitle {
-  font-size: 1.3rem;
-  margin-bottom: 30px;
-  opacity: 0.95;
+.hero-text p {
+  font-size: 1.25rem;
+  margin: 0 0 2rem;
+  color: rgba(255, 255, 255, 0.9);
   max-width: 600px;
   margin-left: auto;
   margin-right: auto;
 }
 
-.hero__cta {
+.btn {
   display: inline-block;
-  background: #dc3545;
-  color: white;
-  padding: 14px 40px;
-  border-radius: 50px;
-  text-decoration: none;
-  font-weight: 700;
-  transition: all 0.3s ease;
-}
-
-.hero__cta:hover {
-  background: #c82333;
-  transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(220, 53, 69, 0.4);
-}
-
-/* Sections */
-.section-title {
-  font-size: 2.5rem;
-  font-weight: 800;
-  margin-bottom: 40px;
-  color: #003399;
-  text-align: center;
-}
-
-.latest-news {
-  padding: 80px 0;
-  background: #f8f9fa;
-}
-
-.articles-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 30px;
-  margin-bottom: 40px;
-}
-
-.section-footer {
-  text-align: center;
-}
-
-.btn-secondary {
-  display: inline-block;
-  background: #003399;
-  color: white;
-  padding: 12px 30px;
-  border-radius: 50px;
+  padding: 0.75rem 2rem;
+  border-radius: 6px;
   text-decoration: none;
   font-weight: 600;
   transition: all 0.3s ease;
+  cursor: pointer;
+  border: none;
+  font-size: 1rem;
 }
 
-.btn-secondary:hover {
-  background: #002266;
+.btn-primary {
+  background: #fff;
+  color: #003399;
+}
+
+.btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 12px rgba(0, 51, 153, 0.3);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
 }
 
-/* Categorías */
+/* Stats Section */
+.stats-section {
+  padding: 4rem 1.5rem;
+  background: #f8f9fa;
+}
+
+.stats-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+}
+
+/* Recent Section */
+.recent-section {
+  padding: 4rem 1.5rem;
+}
+
+.section-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 3rem;
+}
+
+.section-header h2 {
+  font-size: 2rem;
+  color: #003399;
+  margin: 0;
+}
+
+.view-all {
+  color: #003399;
+  text-decoration: none;
+  font-weight: 600;
+  transition: color 0.2s ease;
+}
+
+.view-all:hover {
+  color: #002266;
+}
+
+.articles-preview {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 2rem;
+}
+
+/* Categories Section */
 .categories-section {
-  padding: 80px 0;
-  background: white;
+  padding: 4rem 1.5rem;
+  background: #f8f9fa;
+}
+
+.categories-section h2 {
+  font-size: 2rem;
+  color: #003399;
+  margin-bottom: 3rem;
 }
 
 .categories-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 20px;
+  gap: 1.5rem;
 }
 
 .category-card {
+  background: #fff;
+  padding: 2rem;
+  border-radius: 8px;
+  text-decoration: none;
+  text-align: center;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: center;
-  gap: 10px;
-  padding: 30px;
-  background: linear-gradient(135deg, #e3f2fd 0%, #f3e5f5 100%);
-  border-radius: 12px;
-  text-decoration: none;
-  transition: all 0.3s ease;
-  text-align: center;
-  min-height: 150px;
+  gap: 1rem;
 }
 
 .category-card:hover {
-  background: linear-gradient(135deg, #bbdefb 0%, #e1bee7 100%);
   transform: translateY(-4px);
-  box-shadow: 0 8px 20px rgba(0, 51, 153, 0.15);
+  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
+  background: linear-gradient(135deg, #003399 0%, #002266 100%);
+  color: #fff;
 }
 
-.category-name {
-  font-size: 1rem;
+.category-count {
+  font-size: 2rem;
   font-weight: 700;
   color: #003399;
 }
 
-.category-count {
-  font-size: 0.85rem;
-  color: #666;
+.category-card:hover .category-count {
+  color: #fff;
 }
 
-/* Stats */
-.stats-section {
-  padding: 80px 0;
-  background: linear-gradient(135deg, #003399 0%, #005acc 100%);
-  color: white;
+.category-name {
+  font-weight: 600;
+  color: #333;
 }
 
-.stats-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-  gap: 30px;
+.category-card:hover .category-name {
+  color: #fff;
 }
 
-.stat-card {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  text-align: center;
-}
-
-.stat-number {
-  font-size: 2.5rem;
-  font-weight: 800;
-  margin-bottom: 10px;
-}
-
-.stat-label {
-  font-size: 1rem;
-  opacity: 0.9;
-}
-
-/* Contact */
-.contact-section {
-  padding: 80px 0;
-  background: #f8f9fa;
-  text-align: center;
-}
-
-.contact-description {
-  font-size: 1.1rem;
-  color: #666;
-  margin-bottom: 30px;
-  max-width: 600px;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-/* Loading & No Content */
-.loading,
-.no-content {
-  text-align: center;
-  padding: 40px;
-  color: #666;
-  font-size: 1.1rem;
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 1.5rem;
 }
 
 @media (max-width: 768px) {
-  .hero__title {
+  .hero {
+    padding: 4rem 1.5rem;
+    margin-top: 70px;
+  }
+
+  .hero-text h1 {
     font-size: 2rem;
   }
 
-  .hero__subtitle {
+  .hero-text p {
     font-size: 1rem;
   }
 
-  .section-title {
-    font-size: 1.8rem;
+  .section-header {
+    flex-direction: column;
+    gap: 1rem;
+    align-items: flex-start;
   }
 
-  .articles-grid {
+  .articles-preview {
     grid-template-columns: 1fr;
-  }
-
-  .hero {
-    padding: 60px 20px;
   }
 }
 </style>

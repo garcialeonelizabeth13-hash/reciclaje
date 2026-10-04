@@ -1,24 +1,13 @@
-<script setup lang="ts">
-import AppNavbar from './components/shared/AppNavbar.vue'
-import AppFooter from './components/shared/AppFooter.vue'
-import { RouterView } from 'vue-router'
-import { onMounted } from 'vue'
-
-// Forzar scroll al inicio cuando se monta el componente
-onMounted(() => {
-  window.scrollTo(0, 0)
-})
-</script>
-
 <template>
   <div id="app">
-    <AppNavbar />
-    <main class="app-main">
-      <RouterView />
-    </main>
-    <AppFooter />
+    <RouterView />
   </div>
 </template>
+
+<script setup lang="ts">
+import { RouterView } from 'vue-router'
+import './assets/style.css'
+</script>
 
 <style>
 * {
@@ -31,39 +20,30 @@ html {
   scroll-behavior: smooth;
 }
 
+body,
+html,
+#app {
+  width: 100%;
+  height: 100%;
+}
+
 body {
   font-family:
-    'Inter',
-    -apple-system,
-    BlinkMacSystemFont,
-    'Segoe UI',
-    Roboto,
-    sans-serif;
+    -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  background: #ffffff;
-  color: #333333;
+  background: #fff;
+  color: #333;
   line-height: 1.6;
-}
-
-#app {
-  min-height: 100vh;
-  display: flex;
-  flex-direction: column;
-}
-
-.app-main {
-  flex: 1;
-  width: 100%;
-  padding-top: 80px;
-}
-
-main {
-  flex: 1;
 }
 
 img {
   max-width: 100%;
   height: auto;
+}
+
+a {
+  color: inherit;
+  text-decoration: none;
 }
 </style>

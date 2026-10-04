@@ -1,14 +1,16 @@
-import { apiService } from './api'
+import { apiClient } from './api'
 import type { Category } from '../types'
 
 export const categoriesService = {
-  getAll: (skip: number = 0, limit: number = 50) =>
-    apiService.get<Category[]>('/categories', { skip, limit }),
+  async getAll(skip: number = 0, limit: number = 100): Promise<Category[]> {
+    return apiClient.get(`/categories?skip=${skip}&limit=${limit}`)
+  },
 
-  getById: (id: number) => apiService.get<Category>(`/categories/${id}`),
+  async getById(id: number): Promise<Category> {
+    return apiClient.get(`/categories/${id}`)
+  },
 
-  getCount: (id: number) =>
-    apiService.get<{ category_id: number; category_name: string; article_count: number }>(
-      `/categories/${id}/count`,
-    ),
+  async getActivity(): Promise<any> {
+    return apiClient.get('/stats/categories/activity')
+  },
 }

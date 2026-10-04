@@ -1,56 +1,40 @@
 import { ref, computed } from 'vue'
 import { articlesService } from '../services/articles'
-import type { Article } from '../types'
+import { categoriesService } from '../services/categories'
+import type { Article, Category } from '../types'
 
 export function useArticles() {
   const articles = ref<Article[]>([])
-  const currentArticle = ref<Article | null>(null)
+  const categories = ref<Category[]>([])
   const loading = ref(false)
-  const error = ref<string | null>(null)
 
   const fetchArticles = async (skip: number = 0, limit: number = 20) => {
     loading.value = true
-    error.value = null
     try {
-      articles.value = await articlesService.getAll(skip, limit)
-    } catch (err: any) {
-      error.value = err.message || 'Error al cargar artículos'
+      const result = await articlesService.getAll(skip, limit)
+      articles.value.push(...result)
+      return result
+    } catch (error) {
+      console.error('Error fetching articles:', error)
+      return []
     } finally {
       loading.value = false
     }
   }
 
-  const fetchArticleById = async (id: number) => {
-    loading.value = true
-    error.value = null
+  const fetchCategories = async () => {
     try {
-      currentArticle.value = await articlesService.getById(id)
-    } catch (err: any) {
-      error.value = err.message || 'Error al cargar artículo'
-    } finally {
-      loading.value = false
-    }
-  }
-
-  const fetchByCategory = async (categoryId: number, skip: number = 0, limit: number = 20) => {
-    loading.value = true
-    error.value = null
-    try {
-      articles.value = await articlesService.getByCategory(categoryId, skip, limit)
-    } catch (err: any) {
-      error.value = err.message || 'Error al cargar artículos por categoría'
-    } finally {
-      loading.value = false
+      categories.value = await categoriesService.getAll(0, 100)
+    } catch (error) {
+      console.error('Error fetching categories:', error)
     }
   }
 
   return {
     articles,
-    currentArticle,
+    categories,
     loading,
-    error,
     fetchArticles,
-    fetchArticleById,
-    fetchByCategory,
+    fetchCategories,
   }
 }

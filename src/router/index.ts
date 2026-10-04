@@ -9,38 +9,24 @@ const router = createRouter({
       name: 'home',
       component: HomeView,
     },
-
     {
-      path: '/articles',
+      path: '/observatorio',
+      name: 'observatorio',
+      component: () => import('../views/ObservatorioView.vue'),
+    },
+    {
+      path: '/articulos',
       name: 'articles',
       component: () => import('../views/ArticlesView.vue'),
     },
     {
-      path: '/articles/:id',
+      path: '/articulos/:id',
       name: 'article-detail',
       component: () => import('../views/ArticleDetailView.vue'),
     },
-    {
-      path: '/categories',
-      name: 'categories',
-      component: () => import('../views/CategoriesView.vue'),
-    },
-    {
-      path: '/contacts',
-      name: 'contacts',
-      component: () => import('../views/ContactsView.vue'),
-    },
   ],
-  scrollBehavior(to, from, savedPosition) {
-    // Si hay un hash (#contacto, #servicios, etc.), navega a ese elemento
-    if (to.hash) {
-      return {
-        el: to.hash,
-        behavior: 'smooth',
-      }
-    }
-    // Siempre ir al inicio, ignorando savedPosition en recargas
-    return { top: 0, left: 0 }
+  scrollBehavior() {
+    return { top: 0 }
   },
 })
 

@@ -1,74 +1,49 @@
-import axios, { AxiosInstance, AxiosError } from 'axios'
+const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api'
 
-const API_URL = import.meta.env.VITE_API_BASE_URL || 'http://localhost:8000'
+export const apiClient = {
+  async get<T>(endpoint: string): Promise<T> {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`)
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.statusText}`)
+    }
+    return response.json()
+  },
 
-class ApiService {
-  private client: AxiosInstance
-
-  constructor() {
-    this.client = axios.create({
-      baseURL: API_URL,
-      timeout: 10000,
+  async post<T>(endpoint: string, data: any): Promise<T> {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
+      body: JSON.stringify(data),
     })
-
-    // Interceptor para errores
-    this.client.interceptors.response.use(
-      response => response,
-      error => {
-        console.error('API Error:', error.response?.data || error.message)
-        return Promise.reject(error)
-      }
-    )
-  }
-
-  async get<T>(url: string, params?: any): Promise<T> {
-    try {
-      const response = await this.client.get<T>(url, { params })
-      return response.data
-    } catch (error) {
-      throw this.handleError(error)
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.statusText}`)
     }
-  }
+    return response.json()
+  },
 
-  async post<T>(url: string, data?: any): Promise<T> {
-    try {
-      const response = await this.client.post<T>(url, data)
-      return response.data
-    } catch (error) {
-      throw this.handleError(error)
+  async put<T>(endpoint: string, data: any): Promise<T> {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify(data),
+    })
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.statusText}`)
     }
-  }
+    return response.json()
+  },
 
-  async put<T>(url: string, data?: any): Promise<T> {
-    try {
-      const response = await this.client.put<T>(url, data)
-      return response.data
-    } catch (error) {
-      throw this.handleError(error)
+  async delete<T>(endpoint: string): Promise<T> {
+    const response = await fetch(`${API_BASE_URL}${endpoint}`, {
+      method: 'DELETE',
+    })
+    if (!response.ok) {
+      throw new Error(`API Error: ${response.statusText}`)
     }
-  }
-
-  async delete<T>(url: string): Promise<T> {
-    try {
-      const response = await this.client.delete<T>(url)
-      return response.data
-    } catch (error) {
-      throw this.handleError(error)
-    }
-  }
-
-  private handleError(error: any) {
-    if (error.response) {
-      return new Error(`Error ${error.response.status}: ${error.response.data?.detail || error.response.statusText}`)
-    } else if (error.request) {
-      return new Error('No response from server')
-    } else {
-      return error
-    }
-  }
+    return response.json()
+  },
 }
-
-export const apiService = new ApiService()
