@@ -11,10 +11,16 @@
         <a href="/#servicios" class="navbar__link" @click="menuOpen = false">Servicios</a>
         <a href="/#proceso" class="navbar__link" @click="menuOpen = false">Proceso</a>
         <RouterLink to="/about" class="navbar__link" @click="menuOpen = false">Nosotros</RouterLink>
+        <RouterLink to="/users" class="navbar__link" @click="menuOpen = false">Usuarios</RouterLink>
         <a href="/#contacto" class="navbar__cta" @click="menuOpen = false">Contáctanos</a>
       </nav>
 
-      <button class="navbar__burger" :class="{ 'navbar__burger--open': menuOpen }" @click="menuOpen = !menuOpen" aria-label="Menú">
+      <button
+        class="navbar__burger"
+        :class="{ 'navbar__burger--open': menuOpen }"
+        @click="menuOpen = !menuOpen"
+        aria-label="Menú"
+      >
         <span></span>
         <span></span>
         <span></span>

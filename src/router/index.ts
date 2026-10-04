@@ -17,6 +17,11 @@ const router = createRouter({
       // which is lazy-loaded when the route is visited.
       component: () => import('../views/AboutView.vue'),
     },
+    {
+      path: '/users',
+      name: 'users',
+      component: () => import('../views/UsersView.vue'),
+    },
   ],
   scrollBehavior(to, from, savedPosition) {
     // Si hay un hash (#contacto, #servicios, etc.), navega a ese elemento
