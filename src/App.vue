@@ -11,9 +11,13 @@ onMounted(() => {
 </script>
 
 <template>
-  <AppNavbar />
-  <RouterView />
-  <AppFooter />
+  <div id="app">
+    <AppNavbar />
+    <main class="app-main">
+      <RouterView />
+    </main>
+    <AppFooter />
+  </div>
 </template>
 
 <style>
@@ -46,6 +50,12 @@ body {
   min-height: 100vh;
   display: flex;
   flex-direction: column;
+}
+
+.app-main {
+  flex: 1;
+  width: 100%;
+  padding-top: 80px;
 }
 
 main {

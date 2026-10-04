@@ -84,7 +84,6 @@ const loadContacts = async () => {
   min-height: 100vh;
   background: #f8f9fa;
   padding: 40px 0;
-  margin-top: 80px;
 }
 
 .container {
