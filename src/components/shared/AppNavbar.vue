@@ -8,13 +8,15 @@
 
       <nav class="navbar__nav" :class="{ 'navbar__nav--open': menuOpen }">
         <RouterLink to="/" class="navbar__link" @click="menuOpen = false">Inicio</RouterLink>
-        <a href="/#servicios" class="navbar__link" @click="menuOpen = false">Servicios</a>
-        <a href="/#proceso" class="navbar__link" @click="menuOpen = false">Proceso</a>
-        <RouterLink to="/about" class="navbar__link" @click="menuOpen = false">Nosotros</RouterLink>
         <RouterLink to="/articles" class="navbar__link" @click="menuOpen = false"
-          >Artículos</RouterLink
+          >📰 Artículos</RouterLink
         >
-        <RouterLink to="/users" class="navbar__link" @click="menuOpen = false">Usuarios</RouterLink>
+        <RouterLink to="/categories" class="navbar__link" @click="menuOpen = false"
+          >🏷️ Categorías</RouterLink
+        >
+        <RouterLink to="/contacts" class="navbar__link" @click="menuOpen = false"
+          >👥 Contactos</RouterLink
+        >
         <a href="/#contacto" class="navbar__cta" @click="menuOpen = false">Contáctanos</a>
       </nav>
 
@@ -126,6 +128,8 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
   border-radius: 50px;
   margin-left: 0.5rem;
   transition: all 0.2s ease;
+  border: none;
+  cursor: pointer;
 }
 
 .navbar__cta:hover {

@@ -46,10 +46,10 @@
           <div class="footer__col">
             <h4 class="footer__col-title">Empresa</h4>
             <ul class="footer__links">
-              <li><RouterLink to="/about">Quiénes Somos</RouterLink></li>
-              <li><RouterLink to="/about">Misión y Visión</RouterLink></li>
-              <li><RouterLink to="/about">Nuestro Equipo</RouterLink></li>
-              <li><RouterLink to="/about">Valores</RouterLink></li>
+              <li><RouterLink to="/">Quiénes Somos</RouterLink></li>
+              <li><RouterLink to="/">Misión y Visión</RouterLink></li>
+              <li><RouterLink to="/">Nuestro Equipo</RouterLink></li>
+              <li><RouterLink to="/">Valores</RouterLink></li>
               <li><a href="/#proceso">Nuestro Proceso</a></li>
               <li><a href="/#contacto">Trabaja con Nosotros</a></li>
             </ul>
