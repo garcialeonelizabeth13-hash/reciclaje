@@ -1,39 +1,46 @@
 <template>
   <div class="articles-view">
     <div class="container">
-      <h1>📰 Artículos</h1>
+      <!-- Header -->
+      <header class="page-header">
+        <h1>Noticias</h1>
+        <p>Accede a todas las noticias e información del observatorio</p>
+      </header>
 
-      <!-- Filtros y búsqueda -->
-      <div class="filters">
+      <!-- Filtros -->
+      <div class="filters-section">
         <input
           v-model="searchQuery"
           type="text"
-          placeholder="🔍 Buscar artículos..."
+          placeholder="🔍 Buscar noticias..."
           class="search-input"
-          @keyup="performSearch"
+          @keyup.debounce="performSearch"
         />
+
+        <select v-model="selectedCategory" class="category-filter" @change="filterByCategory">
+          <option value="">Todas las categorías</option>
+          <option v-for="cat in categories" :key="cat.id" :value="cat.id">
+            {{ cat.title }}
+          </option>
+        </select>
       </div>
 
-      <!-- Estado de carga -->
-      <div v-if="loading" class="loading">
-        <p>Cargando artículos...</p>
+      <!-- Loading -->
+      <div v-if="loading" class="loading">Cargando noticias...</div>
+
+      <!-- No Content -->
+      <div v-else-if="articles.length === 0" class="no-content">
+        <p>📭 No hay noticias disponibles</p>
       </div>
 
-      <!-- Error -->
-      <div v-else-if="error" class="error">
-        <p>⚠️ {{ error }}</p>
+      <!-- Articles List -->
+      <div v-else class="articles-list">
+        <article-card v-for="article in articles" :key="article.id" :article="article" />
       </div>
 
-      <!-- Artículos -->
-      <div v-else class="articles-grid">
-        <ArticleCard v-for="article in articles" :key="article.id" :article="article" />
-      </div>
-
-      <!-- Paginación -->
-      <div v-if="articles.length > 0" class="pagination">
-        <button @click="previousPage" :disabled="currentPage === 1">← Anterior</button>
-        <span>Página {{ currentPage }}</span>
-        <button @click="nextPage" :disabled="articles.length < pageSize">Siguiente →</button>
+      <!-- Pagination -->
+      <div v-if="articles.length > 0 && hasMore" class="pagination">
+        <button @click="loadMore" class="btn-load-more">Cargar más noticias</button>
       </div>
     </div>
   </div>
@@ -41,54 +48,87 @@
 
 <script setup lang="ts">
 import { onMounted, ref } from 'vue'
-import { useArticles } from '../composables/useArticles'
-import { useCategories } from '../composables/useCategories'
+import { articlesService } from '../services/articles'
+import { categoriesService } from '../services/categories'
 import ArticleCard from '../components/ArticleCard.vue'
+import type { Article, Category } from '../types'
 
-const { articles, loading, error, fetchArticles, fetchByCategory } = useArticles()
-const { categories, fetchCategories } = useCategories()
-
+const articles = ref<Article[]>([])
+const categories = ref<Category[]>([])
 const searchQuery = ref('')
-const currentPage = ref(1)
+const selectedCategory = ref<number | ''>('')
+const loading = ref(false)
+const currentPage = ref(0)
 const pageSize = ref(20)
+const hasMore = ref(true)
 
 onMounted(async () => {
   await fetchCategories()
-  await loadArticles()
+  await fetchArticles()
 })
 
-const loadArticles = async () => {
-  const skip = (currentPage.value - 1) * pageSize.value
-  await fetchArticles(skip, pageSize.value)
+const fetchCategories = async () => {
+  try {
+    categories.value = await categoriesService.getAll(0, 100)
+  } catch (err) {
+    console.error('Error loading categories:', err)
+  }
+}
+
+const fetchArticles = async () => {
+  loading.value = true
+  try {
+    const skip = currentPage.value * pageSize.value
+
+    let result: Article[]
+    if (selectedCategory.value) {
+      result = await articlesService.getByCategory(
+        selectedCategory.value as number,
+        skip,
+        pageSize.value,
+      )
+    } else {
+      result = await articlesService.getAll(skip, pageSize.value)
+    }
+
+    if (currentPage.value === 0) {
+      articles.value = result
+    } else {
+      articles.value.push(...result)
+    }
+
+    hasMore.value = result.length === pageSize.value
+  } catch (err) {
+    console.error('Error loading articles:', err)
+  } finally {
+    loading.value = false
+  }
+}
+
+const filterByCategory = async () => {
+  currentPage.value = 0
+  await fetchArticles()
 }
 
 const performSearch = async () => {
-  currentPage.value = 1
-  if (searchQuery.value.trim()) {
-    // Implementar búsqueda si es necesario
-    await loadArticles()
-  } else {
-    await loadArticles()
+  if (searchQuery.value.trim().length === 0) {
+    currentPage.value = 0
+    await fetchArticles()
   }
+  // La búsqueda completa se implementaría aquí si es necesario
 }
 
-const nextPage = async () => {
+const loadMore = async () => {
   currentPage.value++
-  await loadArticles()
-}
-
-const previousPage = async () => {
-  if (currentPage.value > 1) {
-    currentPage.value--
-    await loadArticles()
-  }
+  await fetchArticles()
 }
 </script>
 
 <style scoped>
 .articles-view {
+  min-height: 100vh;
+  background: #f8f9fa;
   padding: 40px 0;
-  background: #f5f5f5;
 }
 
 .container {
@@ -97,84 +137,106 @@ const previousPage = async () => {
   padding: 0 20px;
 }
 
-h1 {
-  font-size: 2.5rem;
-  margin-bottom: 30px;
-  color: #333;
+.page-header {
+  text-align: center;
+  margin-bottom: 50px;
 }
 
-.filters {
+.page-header h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #003399;
+  margin-bottom: 15px;
+}
+
+.page-header p {
+  font-size: 1.1rem;
+  color: #666;
+}
+
+/* Filters */
+.filters-section {
   display: grid;
-  grid-template-columns: 1fr auto;
+  grid-template-columns: 2fr 1fr;
   gap: 15px;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
+  background: white;
+  padding: 20px;
+  border-radius: 8px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
 }
 
-.search-input {
+.search-input,
+.category-filter {
   padding: 12px 16px;
   border: 1px solid #ddd;
-  border-radius: 4px;
+  border-radius: 6px;
   font-size: 1rem;
+  font-family: inherit;
 }
 
-.loading,
-.error {
-  text-align: center;
-  padding: 40px;
-  background: white;
-  border-radius: 8px;
+.search-input:focus,
+.category-filter:focus {
+  outline: none;
+  border-color: #003399;
+  box-shadow: 0 0 0 3px rgba(0, 51, 153, 0.1);
 }
 
-.error {
-  color: #d32f2f;
-  background: #ffebee;
-}
-
-.articles-grid {
+/* Articles List */
+.articles-list {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+  gap: 25px;
   margin-bottom: 40px;
 }
 
-.pagination {
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  gap: 20px;
-  margin-top: 40px;
-}
-
-.pagination button {
-  padding: 10px 20px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
+/* States */
+.loading,
+.no-content {
+  text-align: center;
+  padding: 60px 20px;
   background: white;
-  cursor: pointer;
-  transition: all 0.2s;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  color: #666;
 }
 
-.pagination button:hover:not(:disabled) {
-  background: #1976d2;
+/* Pagination */
+.pagination {
+  text-align: center;
+  margin: 60px 0 40px;
+}
+
+.btn-load-more {
+  background: #003399;
   color: white;
+  border: none;
+  padding: 14px 40px;
+  border-radius: 50px;
+  font-size: 1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.3s ease;
 }
 
-.pagination button:disabled {
-  opacity: 0.5;
-  cursor: not-allowed;
+.btn-load-more:hover {
+  background: #002266;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 12px rgba(0, 51, 153, 0.3);
 }
 
 @media (max-width: 768px) {
-  .filters {
-    grid-template-columns: 1fr;
-  }
-
-  .articles-grid {
-    grid-template-columns: 1fr;
-  }
-
-  h1 {
+  .page-header h1 {
     font-size: 2rem;
+  }
+
+  .filters-section {
+    grid-template-columns: 1fr;
+  }
+
+  .articles-list {
+    grid-template-columns: 1fr;
+    gap: 20px;
   }
 }
 </style>

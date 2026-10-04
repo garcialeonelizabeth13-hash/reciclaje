@@ -3,13 +3,13 @@
     <div class="navbar__container">
       <RouterLink to="/" class="navbar__logo">
         <img src="/img/logo.png" alt="ISDE Logo" class="navbar__logo-img" />
-        <span class="navbar__logo-text">ISDE</span>
+        <span class="navbar__logo-text">Observatorio ISDE</span>
       </RouterLink>
 
       <nav class="navbar__nav" :class="{ 'navbar__nav--open': menuOpen }">
         <RouterLink to="/" class="navbar__link" @click="menuOpen = false">Inicio</RouterLink>
         <RouterLink to="/articles" class="navbar__link" @click="menuOpen = false"
-          >📰 Artículos</RouterLink
+          >📰 Noticias</RouterLink
         >
         <RouterLink to="/categories" class="navbar__link" @click="menuOpen = false"
           >🏷️ Categorías</RouterLink
@@ -17,7 +17,6 @@
         <RouterLink to="/contacts" class="navbar__link" @click="menuOpen = false"
           >👥 Contactos</RouterLink
         >
-        <a href="/#contacto" class="navbar__cta" @click="menuOpen = false">Contáctanos</a>
       </nav>
 
       <button
@@ -58,14 +57,14 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
   z-index: 1000;
   padding: 1.2rem 2rem;
   transition: all 0.3s ease;
-  background: rgba(0, 51, 153, 0.95);
+  background: rgba(0, 51, 153, 0.98);
+  backdrop-filter: blur(8px);
 }
 
 .navbar--scrolled {
-  background: rgba(0, 51, 153, 0.98);
-  backdrop-filter: blur(12px);
+  background: rgba(0, 51, 153, 0.99);
   padding: 0.8rem 2rem;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.2);
 }
 
 .navbar__container {
@@ -79,7 +78,7 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
 .navbar__logo {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0.8rem;
   text-decoration: none;
 }
 
@@ -90,7 +89,7 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
 }
 
 .navbar__logo-text {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: 800;
   color: #ffffff;
   letter-spacing: -0.5px;
@@ -99,7 +98,7 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
 .navbar__nav {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 1rem;
 }
 
 .navbar__link {
@@ -108,34 +107,14 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
   font-size: 0.95rem;
   font-weight: 500;
   padding: 8px 14px;
-  border-radius: 8px;
+  border-radius: 6px;
   transition: all 0.2s ease;
 }
 
 .navbar__link:hover,
 .navbar__link.router-link-active {
-  color: #28a745;
-  background: rgba(40, 167, 69, 0.1);
-}
-
-.navbar__cta {
-  background: #dc3545;
   color: #ffffff;
-  text-decoration: none;
-  font-size: 0.9rem;
-  font-weight: 700;
-  padding: 10px 22px;
-  border-radius: 50px;
-  margin-left: 0.5rem;
-  transition: all 0.2s ease;
-  border: none;
-  cursor: pointer;
-}
-
-.navbar__cta:hover {
-  background: #c82333;
-  transform: translateY(-1px);
-  box-shadow: 0 6px 16px rgba(220, 53, 69, 0.4);
+  background: rgba(255, 255, 255, 0.1);
 }
 
 .navbar__burger {
@@ -194,16 +173,9 @@ onUnmounted(() => window.removeEventListener('scroll', handleScroll))
     right: 0;
   }
 
-  .navbar__link,
-  .navbar__cta {
+  .navbar__link {
     width: 100%;
     font-size: 1rem;
-  }
-
-  .navbar__cta {
-    margin-left: 0;
-    text-align: center;
-    margin-top: 1rem;
   }
 }
 </style>

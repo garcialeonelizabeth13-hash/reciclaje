@@ -1,21 +1,33 @@
 <template>
   <div class="categories-view">
     <div class="container">
-      <h1>🏷️ Categorías</h1>
+      <!-- Header -->
+      <header class="page-header">
+        <h1>Categorías</h1>
+        <p>Explora todas las categorías de noticias disponibles</p>
+      </header>
 
+      <!-- Loading -->
       <div v-if="loading" class="loading">Cargando categorías...</div>
-      <div v-else-if="error" class="error">⚠️ {{ error }}</div>
 
+      <!-- No Content -->
+      <div v-else-if="categories.length === 0" class="no-content">
+        <p>📭 No hay categorías disponibles</p>
+      </div>
+
+      <!-- Categories Grid -->
       <div v-else class="categories-grid">
         <router-link
-          v-for="cat in categories"
-          :key="cat.id"
-          :to="`/articles?category=${cat.id}`"
-          class="category-card"
+          v-for="category in categories"
+          :key="category.id"
+          :to="`/articles?category=${category.id}`"
+          class="category-item"
         >
-          <h3>{{ cat.title }}</h3>
-          <p v-if="cat.description" class="description">{{ cat.description }}</p>
-          <p class="article-count">{{ getCategoryCount(cat.id) }} artículos</p>
+          <div class="category-card">
+            <h3>{{ category.title }}</h3>
+            <p v-if="category.description" class="description">{{ category.description }}</p>
+            <span class="article-count">{{ getArticleCount(category.id) }} noticias</span>
+          </div>
         </router-link>
       </div>
     </div>
@@ -23,35 +35,50 @@
 </template>
 
 <script setup lang="ts">
-import { onMounted, ref } from 'vue'
-import { useCategories } from '../composables/useCategories'
+import { onMounted, ref, computed } from 'vue'
+import { categoriesService } from '../services/categories'
+import { articlesService } from '../services/articles'
+import type { Category, Article } from '../types'
 
-const { categories, loading, error, fetchCategories, fetchCategoryCount } = useCategories()
-const categoryCount = ref<Record<number, number>>({})
+const categories = ref<Category[]>([])
+const articles = ref<Article[]>([])
+const loading = ref(false)
 
 onMounted(async () => {
-  await fetchCategories()
-  loadCategoryCounts()
+  await loadCategories()
+  await loadArticles()
 })
 
-const loadCategoryCounts = async () => {
-  for (const cat of categories.value) {
-    const result = await fetchCategoryCount(cat.id)
-    if (result) {
-      categoryCount.value[cat.id] = result.article_count
-    }
+const loadCategories = async () => {
+  loading.value = true
+  try {
+    categories.value = await categoriesService.getAll(0, 100)
+  } catch (err) {
+    console.error('Error loading categories:', err)
+  } finally {
+    loading.value = false
   }
 }
 
-const getCategoryCount = (catId: number): number => {
-  return categoryCount.value[catId] || 0
+const loadArticles = async () => {
+  try {
+    articles.value = await articlesService.getAll(0, 500)
+  } catch (err) {
+    console.error('Error loading articles:', err)
+  }
+}
+
+const getArticleCount = (categoryId: number): number => {
+  return articles.value.filter((a) => a.catid === categoryId).length
 }
 </script>
 
 <style scoped>
 .categories-view {
+  min-height: 100vh;
+  background: #f8f9fa;
   padding: 40px 0;
-  background: #f5f5f5;
+  margin-top: 80px;
 }
 
 .container {
@@ -60,65 +87,88 @@ const getCategoryCount = (catId: number): number => {
   padding: 0 20px;
 }
 
-h1 {
-  font-size: 2.5rem;
-  margin-bottom: 30px;
-  color: #333;
-}
-
-.loading,
-.error {
+.page-header {
   text-align: center;
-  padding: 40px;
-  background: white;
-  border-radius: 8px;
+  margin-bottom: 50px;
 }
 
+.page-header h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #003399;
+  margin-bottom: 15px;
+}
+
+.page-header p {
+  font-size: 1.1rem;
+  color: #666;
+}
+
+/* Grid */
 .categories-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
+}
+
+.category-item {
+  text-decoration: none;
 }
 
 .category-card {
   background: white;
+  border-radius: 12px;
   padding: 30px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  text-decoration: none;
-  transition: all 0.3s;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
   display: flex;
   flex-direction: column;
-  border-left: 4px solid #1976d2;
+  gap: 15px;
 }
 
 .category-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  transform: translateY(-6px);
+  box-shadow: 0 12px 24px rgba(0, 51, 153, 0.15);
+  background: linear-gradient(135deg, #f0f4ff 0%, #fff5f9 100%);
 }
 
 .category-card h3 {
   font-size: 1.5rem;
-  margin-bottom: 10px;
-  color: #333;
-}
-
-.category-card .description {
-  color: #666;
-  margin-bottom: 15px;
-  flex-grow: 1;
-  font-size: 0.95rem;
-  line-height: 1.4;
-}
-
-.category-card .article-count {
-  color: #1976d2;
-  font-weight: 600;
+  font-weight: 700;
+  color: #003399;
   margin: 0;
 }
 
+.description {
+  color: #666;
+  font-size: 0.95rem;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.article-count {
+  font-size: 0.9rem;
+  color: #999;
+  font-weight: 600;
+}
+
+/* States */
+.loading,
+.no-content {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  color: #666;
+}
+
 @media (max-width: 768px) {
-  h1 {
+  .categories-view {
+    margin-top: 80px;
+  }
+
+  .page-header h1 {
     font-size: 2rem;
   }
 

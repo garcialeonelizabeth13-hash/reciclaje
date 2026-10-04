@@ -7,51 +7,34 @@
           <div class="footer__brand">
             <div class="footer__logo">
               <img src="/img/logo.png" alt="ISDE Logo" class="footer__logo-img" />
-              <span class="footer__logo-text">ISDE</span>
+              <span class="footer__logo-text">Observatorio ISDE</span>
             </div>
             <p class="footer__tagline">
               <strong>ISDE - Empresa de Ingeniería Del Reciclaje</strong><br />
               Empresa Estatal Socialista - Grupo Empresarial del Reciclaje<br /><br />
-              Transformamos residuos en recursos valiosos para construir un futuro sostenible.
+              Tu fuente de información sobre innovación, ingeniería y reciclaje sostenible
             </p>
-            <div class="footer__socials">
-              <a href="#" class="footer__social" aria-label="Facebook">
-                <i class="mdi mdi-facebook"></i>
-              </a>
-              <a href="#" class="footer__social" aria-label="Instagram">
-                <i class="mdi mdi-instagram"></i>
-              </a>
-              <a href="#" class="footer__social" aria-label="LinkedIn">
-                <i class="mdi mdi-linkedin"></i>
-              </a>
-              <a href="#" class="footer__social" aria-label="WhatsApp">
-                <i class="mdi mdi-whatsapp"></i>
-              </a>
-            </div>
           </div>
 
           <!-- Links -->
           <div class="footer__col">
-            <h4 class="footer__col-title">Servicios</h4>
+            <h4 class="footer__col-title">Navegación</h4>
             <ul class="footer__links">
-              <li><a href="/#servicios">Recolección de Residuos</a></li>
-              <li><a href="/#servicios">Clasificación</a></li>
-              <li><a href="/#servicios">Procesamiento Industrial</a></li>
-              <li><a href="/#servicios">Reciclaje Orgánico</a></li>
-              <li><a href="/#servicios">Residuos Electrónicos</a></li>
-              <li><a href="/#servicios">Consultoría Ambiental</a></li>
+              <li><RouterLink to="/">Inicio</RouterLink></li>
+              <li><RouterLink to="/articles">Noticias</RouterLink></li>
+              <li><RouterLink to="/categories">Categorías</RouterLink></li>
+              <li><RouterLink to="/contacts">Contactos</RouterLink></li>
             </ul>
           </div>
 
+          <!-- Información -->
           <div class="footer__col">
-            <h4 class="footer__col-title">Empresa</h4>
+            <h4 class="footer__col-title">Información</h4>
             <ul class="footer__links">
-              <li><RouterLink to="/">Quiénes Somos</RouterLink></li>
-              <li><RouterLink to="/">Misión y Visión</RouterLink></li>
-              <li><RouterLink to="/">Nuestro Equipo</RouterLink></li>
-              <li><RouterLink to="/">Valores</RouterLink></li>
-              <li><a href="/#proceso">Nuestro Proceso</a></li>
-              <li><a href="/#contacto">Trabaja con Nosotros</a></li>
+              <li><a href="#privacy">Privacidad</a></li>
+              <li><a href="#terms">Términos de Uso</a></li>
+              <li><a href="#cookies">Política de Cookies</a></li>
+              <li><a href="#about">Acerca De</a></li>
             </ul>
           </div>
 
@@ -59,20 +42,13 @@
             <h4 class="footer__col-title">Contacto</h4>
             <ul class="footer__contact-list">
               <li>
-                <i class="mdi mdi-map-marker"></i>
-                <span>Av. Verde 123, Col. Ecológica</span>
+                <span>📍 La Habana, Cuba</span>
               </li>
               <li>
-                <i class="mdi mdi-phone"></i>
-                <a href="tel:+525512345678">+52 (55) 1234-5678</a>
+                <span>📧 info@isde.co.cu</span>
               </li>
               <li>
-                <i class="mdi mdi-email"></i>
-                <a href="mailto:contacto@reciclaje.com">contacto@reciclaje.com</a>
-              </li>
-              <li>
-                <i class="mdi mdi-clock-outline"></i>
-                <span>Lun–Vie: 8am – 6pm</span>
+                <span>🕐 Lun–Vie: 9am – 5pm</span>
               </li>
             </ul>
           </div>
@@ -82,10 +58,7 @@
 
     <div class="footer__bottom">
       <div class="container">
-        <p>
-          © {{ currentYear }} ISDE - Empresa de Ingeniería Del Reciclaje. Todos los derechos
-          reservados.
-        </p>
+        <p>© {{ currentYear }} ISDE - Observatorio. Todos los derechos reservados.</p>
         <p>Empresa Estatal Socialista | Grupo Empresarial del Reciclaje</p>
       </div>
     </div>
@@ -134,7 +107,7 @@ const currentYear = new Date().getFullYear()
 }
 
 .footer__logo-text {
-  font-size: 1.3rem;
+  font-size: 1.2rem;
   font-weight: 800;
   color: #ffffff;
 }
@@ -144,40 +117,6 @@ const currentYear = new Date().getFullYear()
   line-height: 1.7;
   color: rgba(255, 255, 255, 0.6);
   margin-bottom: 1.5rem;
-}
-
-.footer__socials {
-  display: flex;
-  gap: 0.8rem;
-}
-
-.footer__social {
-  width: 40px;
-  height: 40px;
-  border-radius: 50%;
-  background: rgba(255, 255, 255, 0.07);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 1.1rem;
-  text-decoration: none;
-  transition: all 0.2s ease;
-}
-
-.footer__social i {
-  color: rgba(255, 255, 255, 0.7);
-  font-size: 1.2rem;
-}
-
-.footer__social:hover {
-  background: rgba(40, 167, 69, 0.2);
-  border-color: rgba(40, 167, 69, 0.5);
-  transform: translateY(-2px);
-}
-
-.footer__social:hover i {
-  color: #28a745;
 }
 
 .footer__col-title {
@@ -223,27 +162,8 @@ const currentYear = new Date().getFullYear()
   font-size: 0.88rem;
 }
 
-.footer__contact-list span:first-child {
-  flex-shrink: 0;
-  font-size: 1rem;
-  margin-top: 1px;
-}
-
-.footer__contact-list i {
-  flex-shrink: 0;
-  font-size: 1.1rem;
-  color: #28a745;
-  margin-top: 2px;
-}
-
-.footer__contact-list a {
+.footer__contact-list span {
   color: rgba(255, 255, 255, 0.7);
-  text-decoration: none;
-  transition: color 0.2s;
-}
-
-.footer__contact-list a:hover {
-  color: #28a745;
 }
 
 .footer__bottom {

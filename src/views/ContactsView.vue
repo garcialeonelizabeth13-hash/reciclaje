@@ -1,33 +1,53 @@
 <template>
   <div class="contacts-view">
     <div class="container">
-      <h1>👥 Contactos</h1>
+      <!-- Header -->
+      <header class="page-header">
+        <h1>Contactos</h1>
+        <p>Contacta con nuestro equipo para más información</p>
+      </header>
 
-      <input
-        v-model="searchQuery"
-        type="text"
-        placeholder="🔍 Buscar contactos..."
-        class="search-input"
-        @keyup="performSearch"
-      />
-
+      <!-- Loading -->
       <div v-if="loading" class="loading">Cargando contactos...</div>
-      <div v-else-if="error" class="error">⚠️ {{ error }}</div>
 
-      <div v-else class="contacts-list">
+      <!-- No Content -->
+      <div v-else-if="contacts.length === 0" class="no-content">
+        <p>📭 No hay contactos disponibles</p>
+      </div>
+
+      <!-- Contacts Grid -->
+      <div v-else class="contacts-grid">
         <div v-for="contact in contacts" :key="contact.id" class="contact-card">
           <h3>{{ contact.name }}</h3>
-          <p v-if="contact.con_position" class="position">{{ contact.con_position }}</p>
-          <div class="contact-info">
-            <p v-if="contact.email_to">
-              📧 <a :href="`mailto:${contact.email_to}`">{{ contact.email_to }}</a>
-            </p>
-            <p v-if="contact.telephone">📞 {{ contact.telephone }}</p>
-            <p v-if="contact.mobile">📱 {{ contact.mobile }}</p>
-            <p v-if="contact.webpage">
-              🌐 <a :href="contact.webpage" target="_blank">{{ contact.webpage }}</a>
-            </p>
-            <p v-if="contact.address">📍 {{ contact.address }}</p>
+
+          <div v-if="contact.con_position" class="field">
+            <span class="label">Puesto:</span>
+            <span>{{ contact.con_position }}</span>
+          </div>
+
+          <div v-if="contact.email_to" class="field">
+            <span class="label">Email:</span>
+            <a :href="`mailto:${contact.email_to}`">{{ contact.email_to }}</a>
+          </div>
+
+          <div v-if="contact.telephone" class="field">
+            <span class="label">Teléfono:</span>
+            <a :href="`tel:${contact.telephone}`">{{ contact.telephone }}</a>
+          </div>
+
+          <div v-if="contact.mobile" class="field">
+            <span class="label">Celular:</span>
+            <a :href="`tel:${contact.mobile}`">{{ contact.mobile }}</a>
+          </div>
+
+          <div v-if="contact.address" class="field">
+            <span class="label">Dirección:</span>
+            <span>{{ contact.address }}</span>
+          </div>
+
+          <div v-if="contact.webpage" class="field">
+            <span class="label">Web:</span>
+            <a :href="contact.webpage" target="_blank" rel="noopener">{{ contact.webpage }}</a>
           </div>
         </div>
       </div>
@@ -36,123 +56,146 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
-import { useContacts } from '../composables/useContacts'
+import { onMounted, ref } from 'vue'
+import { contactsService } from '../services/contacts'
+import type { Contact } from '../types'
 
-const { contacts, loading, error, fetchContacts, search } = useContacts()
-const searchQuery = ref('')
+const contacts = ref<Contact[]>([])
+const loading = ref(false)
 
 onMounted(async () => {
-  await fetchContacts()
+  await loadContacts()
 })
 
-const performSearch = async () => {
-  if (searchQuery.value.trim()) {
-    await search(searchQuery.value)
-  } else {
-    await fetchContacts()
+const loadContacts = async () => {
+  loading.value = true
+  try {
+    contacts.value = await contactsService.getAll(0, 100)
+  } catch (err) {
+    console.error('Error loading contacts:', err)
+  } finally {
+    loading.value = false
   }
 }
 </script>
 
 <style scoped>
 .contacts-view {
+  min-height: 100vh;
+  background: #f8f9fa;
   padding: 40px 0;
-  background: #f5f5f5;
+  margin-top: 80px;
 }
 
 .container {
-  max-width: 1000px;
+  max-width: 1200px;
   margin: 0 auto;
   padding: 0 20px;
 }
 
-h1 {
-  font-size: 2.5rem;
-  margin-bottom: 30px;
-  color: #333;
-}
-
-.search-input {
-  width: 100%;
-  max-width: 400px;
-  padding: 12px 16px;
-  border: 1px solid #ddd;
-  border-radius: 4px;
-  font-size: 1rem;
-  margin-bottom: 30px;
-}
-
-.loading,
-.error {
+.page-header {
   text-align: center;
-  padding: 40px;
-  background: white;
-  border-radius: 8px;
+  margin-bottom: 50px;
 }
 
-.contacts-list {
+.page-header h1 {
+  font-size: 3rem;
+  font-weight: 800;
+  color: #003399;
+  margin-bottom: 15px;
+}
+
+.page-header p {
+  font-size: 1.1rem;
+  color: #666;
+}
+
+/* Grid */
+.contacts-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-  gap: 20px;
+  grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+  gap: 25px;
 }
 
 .contact-card {
   background: white;
-  padding: 25px;
-  border-radius: 8px;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-  transition: transform 0.3s;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+  transition: all 0.3s ease;
+  border-left: 4px solid #003399;
 }
 
 .contact-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 12px 24px rgba(0, 51, 153, 0.15);
 }
 
 .contact-card h3 {
-  font-size: 1.3rem;
-  margin-bottom: 5px;
-  color: #333;
+  font-size: 1.4rem;
+  font-weight: 700;
+  color: #003399;
+  margin: 0 0 20px 0;
 }
 
-.contact-card .position {
-  color: #1976d2;
-  font-weight: 600;
+.field {
+  display: grid;
+  grid-template-columns: 120px 1fr;
+  gap: 10px;
   margin-bottom: 15px;
-  font-size: 0.95rem;
+  align-items: flex-start;
 }
 
-.contact-info {
-  font-size: 0.95rem;
+.label {
+  font-weight: 600;
   color: #666;
-  line-height: 1.8;
+  font-size: 0.9rem;
 }
 
-.contact-info p {
-  margin: 8px 0;
+.field span,
+.field a {
+  color: #333;
+  font-size: 0.95rem;
+  word-break: break-word;
 }
 
-.contact-info a {
-  color: #1976d2;
+.field a {
+  color: #003399;
   text-decoration: none;
+  transition: color 0.2s;
 }
 
-.contact-info a:hover {
+.field a:hover {
+  color: #005acc;
   text-decoration: underline;
 }
 
+/* States */
+.loading,
+.no-content {
+  text-align: center;
+  padding: 60px 20px;
+  background: white;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  color: #666;
+}
+
 @media (max-width: 768px) {
-  h1 {
+  .contacts-view {
+    margin-top: 80px;
+  }
+
+  .page-header h1 {
     font-size: 2rem;
   }
 
-  .contacts-list {
+  .contacts-grid {
     grid-template-columns: 1fr;
   }
 
-  .search-input {
-    max-width: 100%;
+  .field {
+    grid-template-columns: 1fr;
   }
 }
 </style>
