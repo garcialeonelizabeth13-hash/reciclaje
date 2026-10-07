@@ -40,25 +40,6 @@
         </div>
       </div>
     </section>
-
-    <!-- Categories Section -->
-    <section class="categories-section">
-      <div class="container">
-        <h2>Categorías Principales</h2>
-        <div class="categories-grid">
-          <a
-            v-for="cat in categories"
-            :key="cat.id"
-            href="#"
-            class="category-card"
-            @click.prevent="goToCategory(cat.id)"
-          >
-            <span class="category-count">{{ categoryCounts[cat.id] || 0 }}</span>
-            <span class="category-name">{{ cat.title }}</span>
-          </a>
-        </div>
-      </div>
-    </section>
   </Layout>
 </template>
 
@@ -69,31 +50,15 @@ import Layout from '../components/shared/Layout.vue'
 import StatCard from '../components/StatCard.vue'
 import ArticleCard from '../components/ArticleCard.vue'
 import { articlesService } from '../services/articles'
-import { categoriesService } from '../services/categories'
-import type { Article, Category } from '../types'
+import type { Article } from '../types'
 
 const router = useRouter()
 const recentArticles = ref<Article[]>([])
-const categories = ref<Category[]>([])
-const categoryCounts = ref<Record<number, number>>({})
-
-const goToCategory = (categoryId: number) => {
-  router.push(`/observatorio?categoria=${categoryId}`)
-}
 
 onMounted(async () => {
   try {
     const articles = await articlesService.getAll(0, 6)
     recentArticles.value = articles
-
-    const cats = await categoriesService.getAll(0, 100)
-    categories.value = cats
-
-    // Contar artículos por categoría
-    for (const cat of cats) {
-      const count = articles.filter((a) => a.catid === cat.id).length
-      categoryCounts.value[cat.id] = count
-    }
   } catch (error) {
     console.error('Error loading home data:', error)
   }
@@ -197,64 +162,6 @@ onMounted(async () => {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
   gap: 2rem;
-}
-
-/* Categories Section */
-.categories-section {
-  padding: 4rem 1.5rem;
-  background: #f8f9fa;
-}
-
-.categories-section h2 {
-  font-size: 2rem;
-  color: #003399;
-  margin-bottom: 3rem;
-}
-
-.categories-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-  gap: 1.5rem;
-}
-
-.category-card {
-  background: #fff;
-  padding: 2rem;
-  border-radius: 8px;
-  text-decoration: none;
-  text-align: center;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
-  transition: all 0.3s ease;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 1rem;
-}
-
-.category-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 24px rgba(0, 0, 0, 0.12);
-  background: linear-gradient(135deg, #003399 0%, #002266 100%);
-  color: #fff;
-}
-
-.category-count {
-  font-size: 2rem;
-  font-weight: 700;
-  color: #003399;
-}
-
-.category-card:hover .category-count {
-  color: #fff;
-}
-
-.category-name {
-  font-weight: 600;
-  color: #333;
-}
-
-.category-card:hover .category-name {
-  color: #fff;
 }
 
 .container {
