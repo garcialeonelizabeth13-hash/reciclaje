@@ -17,18 +17,23 @@
       </button>
 
       <ul class="navbar-menu" :class="{ active: mobileMenuOpen }">
-        <li>
-          <RouterLink to="/" class="navbar-link" @click="mobileMenuOpen = false">Inicio</RouterLink>
+        <li class="nav-item">
+          <RouterLink to="/" class="navbar-link" @click="mobileMenuOpen = false">
+            <i class="mdi mdi-home"></i>
+            Inicio
+          </RouterLink>
         </li>
-        <li>
-          <RouterLink to="/observatorio" class="navbar-link" @click="mobileMenuOpen = false"
-            >Observatorio</RouterLink
-          >
+        <li class="nav-item">
+          <RouterLink to="/observatorio" class="navbar-link" @click="mobileMenuOpen = false">
+            <i class="mdi mdi-chart-line"></i>
+            Observatorio
+          </RouterLink>
         </li>
-        <li>
-          <RouterLink to="/articulos" class="navbar-link" @click="mobileMenuOpen = false"
-            >Artículos</RouterLink
-          >
+        <li class="nav-item">
+          <RouterLink to="/articulos" class="navbar-link" @click="mobileMenuOpen = false">
+            <i class="mdi mdi-file-document-multiple"></i>
+            Artículos
+          </RouterLink>
         </li>
       </ul>
     </div>
@@ -62,15 +67,16 @@ onUnmounted(() => {
   left: 0;
   right: 0;
   z-index: 1000;
-  background: linear-gradient(135deg, #003399 0%, #002266 100%);
-  padding: 1rem 0;
+  background: linear-gradient(135deg, #1a472a 0%, #2d5f3d 100%);
+  padding: 0.75rem 0;
   transition: all 0.3s ease;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 .navbar--scrolled {
   padding: 0.5rem 0;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  background: linear-gradient(135deg, #164a2a 0%, #265635 100%);
 }
 
 .navbar-container {
@@ -87,37 +93,70 @@ onUnmounted(() => {
   align-items: center;
   gap: 0.75rem;
   text-decoration: none;
-  font-weight: 700;
+  font-weight: 800;
   color: #fff;
-  font-size: 1.25rem;
+  font-size: 1.3rem;
+  transition: all 0.2s ease;
+  flex-shrink: 0;
+}
+
+.navbar-brand:hover {
+  opacity: 0.9;
+  transform: translateY(-2px);
 }
 
 .navbar-brand-icon {
-  font-size: 1.75rem;
+  font-size: 1.8rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.navbar-brand-text {
+  letter-spacing: -0.5px;
 }
 
 .navbar-menu {
   display: flex;
   list-style: none;
-  gap: 0;
+  gap: 1rem;
   margin: 0;
   padding: 0;
+  align-items: center;
+}
+
+.nav-item {
+  position: relative;
 }
 
 .navbar-link {
-  display: block;
-  padding: 0.75rem 1.25rem;
-  color: rgba(255, 255, 255, 0.9);
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.6rem 1.2rem;
+  color: rgba(255, 255, 255, 0.85);
   text-decoration: none;
   font-weight: 500;
-  transition: all 0.2s ease;
-  border-radius: 4px;
+  transition: all 0.3s ease;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  white-space: nowrap;
 }
 
-.navbar-link:hover,
-.navbar-link.router-link-active {
-  background: rgba(255, 255, 255, 0.2);
+.navbar-link i {
+  font-size: 1.1rem;
+}
+
+.navbar-link:hover {
+  background: rgba(255, 255, 255, 0.15);
   color: #fff;
+  transform: translateY(-2px);
+}
+
+.navbar-link.router-link-active {
+  background: rgba(76, 175, 80, 0.3);
+  color: #fff;
+  border: 1px solid rgba(76, 175, 80, 0.5);
 }
 
 .navbar-toggle {
@@ -132,7 +171,7 @@ onUnmounted(() => {
 
 .navbar-toggle span {
   width: 24px;
-  height: 2px;
+  height: 2.5px;
   background: #fff;
   border-radius: 2px;
   transition: all 0.3s ease;
@@ -155,28 +194,51 @@ onUnmounted(() => {
     display: flex;
   }
 
+  .navbar-brand-text {
+    display: none;
+  }
+
   .navbar-menu {
     position: fixed;
     top: 60px;
     right: -100%;
     width: 100%;
-    max-width: 300px;
+    max-width: 100%;
     height: calc(100vh - 60px);
-    background: linear-gradient(135deg, #003399 0%, #002266 100%);
+    background: linear-gradient(135deg, #1a472a 0%, #2d5f3d 100%);
     flex-direction: column;
     gap: 0;
     transition: right 0.3s ease;
     overflow-y: auto;
     box-shadow: -4px 0 12px rgba(0, 0, 0, 0.2);
+    padding: 1rem 0;
   }
 
   .navbar-menu.active {
     right: 0;
   }
 
+  .nav-item {
+    width: 100%;
+  }
+
   .navbar-link {
+    width: 100%;
     border-radius: 0;
     border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    padding: 1rem 1.5rem;
+    justify-content: flex-start;
+  }
+
+  .navbar-link:hover {
+    background: rgba(76, 175, 80, 0.2);
+    transform: none;
+  }
+
+  .navbar-link.router-link-active {
+    background: rgba(76, 175, 80, 0.3);
+    border: none;
+    border-left: 4px solid #4caf50;
   }
 }
 </style>
