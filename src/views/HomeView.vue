@@ -20,10 +20,10 @@
     <section class="stats-section">
       <div class="container">
         <div class="stats-grid">
-          <StatCard icon="📰" label="Artículos" value="250+" change="12" />
-          <StatCard icon="🏷️" label="Categorías" value="15" change="5" />
-          <StatCard icon="👁️" label="Vistas" value="50K+" change="18" />
-          <StatCard icon="⭐" label="Destacados" value="32" change="8" />
+          <StatCard icon="📰" label="Artículos" value="250+" :change="12" />
+          <StatCard icon="🏷️" label="Categorías" value="15" :change="5" />
+          <StatCard icon="👁️" label="Vistas" value="50K+" :change="18" />
+          <StatCard icon="⭐" label="Destacados" value="32" :change="8" />
         </div>
       </div>
     </section>
@@ -64,7 +64,7 @@
 
 <script setup lang="ts">
 import { ref, onMounted } from 'vue'
-import { RouterLink } from 'vue-router'
+import { RouterLink, useRouter } from 'vue-router'
 import Layout from '../components/shared/Layout.vue'
 import StatCard from '../components/StatCard.vue'
 import ArticleCard from '../components/ArticleCard.vue'
@@ -72,9 +72,14 @@ import { articlesService } from '../services/articles'
 import { categoriesService } from '../services/categories'
 import type { Article, Category } from '../types'
 
+const router = useRouter()
 const recentArticles = ref<Article[]>([])
 const categories = ref<Category[]>([])
 const categoryCounts = ref<Record<number, number>>({})
+
+const goToCategory = (categoryId: number) => {
+  router.push(`/observatorio?categoria=${categoryId}`)
+}
 
 onMounted(async () => {
   try {
